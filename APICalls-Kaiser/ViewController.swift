@@ -10,6 +10,12 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var lableOutlet: UILabel!
+    @IBOutlet weak var minLabel: UILabel!
+    @IBOutlet weak var maxLabel: UILabel!
+    @IBOutlet weak var humidityLabel: UILabel!
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -39,11 +45,32 @@ class ViewController: UIViewController {
                         print(jsonObj)
                         // jsonObj is an object with tons dictionaries.
                         if let main = jsonObj.value(forKey: "main") as? NSDictionary{
+                            if let minTemp = main.value(forKey: "temp_min") as? Double {
+                                DispatchQueue.main.async{
+                                    self.minLabel.text = "\(minTemp)"
+                                }
+                            }
+                            if let maxTemp = main.value(forKey: "temp_max") as? Double {
+                                DispatchQueue.main.async{
+                                    self.maxLabel.text = "\(maxTemp)"
+                                }
+                            }
+                            if let humidity = main.value(forKey: "humidity") as? Double {
+                                DispatchQueue.main.async{
+                                    self.humidityLabel.text = "\(humidity)"
+                                }
+                            }
                             if let temp = main.value(forKey: "temp") as? Double{
-                                print(temp)
                                 // Making this code happen in the main thread, because this closure is operating on a different thread
                                 DispatchQueue.main.async {
                                     self.lableOutlet.text = "\(temp)"
+                                }
+                            }
+                        }
+                        if let sys = jsonObj.value(forKey: "sys") as? NSDictionary{
+                            if let sunset = sys.value(forKey: "sunset") as? Double{
+                                DispatchQueue.main.async {
+                                    
                                 }
                             }
                         }
@@ -53,6 +80,7 @@ class ViewController: UIViewController {
         }
         dataTask.resume()
     }
+
 
 }
 
